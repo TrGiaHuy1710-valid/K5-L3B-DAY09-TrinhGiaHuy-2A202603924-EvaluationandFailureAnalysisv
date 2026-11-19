@@ -26,7 +26,7 @@ Trace của trial lỗi (`seeded_regression`):
 
 | Trường | Nội dung |
 |---|---|
-| Trial | `seeded_regression C-014@11` (item E-014). Report `src/reports/eval_seeded_regression.json`, run ID `E-seeded_regression-20261119-821a`. Dòng `E-014@11`: `refund_amount_correct=false`, `pass_rate=false`, `reply_amount_matches_ledger=false`. |
+| Trial | `seeded_regression C-014@11` (item E-014). Report `src/reports/eval_seeded_regression.json`, run ID `E-seeded_regression-20261119-1bea`. Dòng `E-014@11`: `refund_amount_correct=false`, `pass_rate=false`, `reply_amount_matches_ledger=false`. |
 | Triệu chứng | Lab 8 chỉ báo `proposal_mismatch`. Status `resolved` khớp nhãn, nên nhìn status thì tưởng đúng. **Ledger** ghi 90.000đ trong khi nhãn là 120.000đ: khách bị thiếu 30.000đ. Reply nói "đã hoàn 120.000đ", tức là reply nói một số mà ledger không có (FM-08 là hệ quả đi kèm). |
 | Bước sai đầu tiên | **#5 `proposal {"amount_vnd": 120000}`**: agent tự trừ 30.000đ đã hoàn trước đó khỏi quote 150.000đ, rồi mới gọi host. |
 | Vì sao là bước *đầu tiên* | Mọi bước trước đó đều đúng. #2 đọc đúng đơn O-515 từ DB (không có `model_override`). #3 quote = 150.000đ là entitlement đúng theo luật "lấy số lớn hơn" (max(ship 30.000, DMG-04 150.000)), không cộng. #4 `refund_history` là một read tool hợp lệ và trả đúng 30.000đ. Sai bắt đầu ở #5: luật nghiệp vụ yêu cầu truyền **quote đầy đủ** vào `issue_refund`, vì host tự áp trần theo đơn. Agent trừ trước nên host trừ thêm lần nữa: 150.000 − 30.000 − 30.000 = 90.000. |

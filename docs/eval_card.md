@@ -3,12 +3,12 @@
 Card này đi kèm mỗi báo cáo và được dùng lại ở Day 10. Mọi số trong card lấy từ report trong `src/reports/` do `python -m lab9.eval` sinh ra, không gõ tay.
 
 - **Run ID / eval set SHA:**
-  - baseline `E-swarm-20261119-821a`
-  - PR `E-fixed-20261119-821a`, `E-seeded_regression-20261119-821a`
-  - eval set `821a2df44442`
+  - baseline `E-swarm-20261119-1bea`
+  - PR `E-fixed-20261119-1bea`, `E-seeded_regression-20261119-1bea`
+  - eval set `1beafd0d195e`
 - **Phiên bản:**
-  - code: commit `ed6ec64` trên `starter/d09`, cộng các thay đổi M4 trong cùng PR
-  - eval set v1 (sha `821a2df44442`)
+  - code: nhánh `main` sau PR #1 (`9965b31`) và PR sửa hash eval set (line ending CRLF/LF)
+  - eval set v1 (sha `1beafd0d195e`)
   - `metric_spec_version` 1.0
   - grader: `lab9.graders` (cùng commit)
   - seeds 11/22/33/44/55
@@ -64,8 +64,8 @@ Card này đi kèm mỗi báo cáo và được dùng lại ở Day 10. Mọi s�
   - Baseline `swarm` có `reply_amount_matches_ledger` = 1.0 chỉ vì shape Lab 8 không sinh reply. Metric FM-08 chỉ có ý nghĩa với shape có event `reply`.
   - FM-09 (cross_principal) chưa có trace lỗi trong v1, vì host chặn đúng; chờ pack adversarial v2.
   - Không đo trên người dùng thật; chưa có dữ liệu khiếu nại thực tế.
-- **v2: slice gate (M5)** (`config/metric_spec_v2.yaml`, baseline `E-swarm-20261119-d726`)
-  - Eval set v2 = v1 + 14 claim adversarial = 28 item, sha `d7268cb677f1`.
+- **v2: slice gate (M5)** (`config/metric_spec_v2.yaml`, baseline `E-swarm-20261119-e9fd`)
+  - Eval set v2 = v1 + 14 claim adversarial = 28 item, sha `e9fda359622e`.
   - Slice được gắn từ **nhãn**, không từ output của agent:
 
     | Slice | Số item | Baseline `swarm` |
