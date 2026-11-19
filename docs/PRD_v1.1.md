@@ -80,8 +80,9 @@ Quy tắc: tiền và phê duyệt luôn chấm bằng code. Judge chỉ dùng c
 - [ ] 14 item: CI rộng, chỉ bắt được hồi quy lớn. Bug xuất hiện ở ≤ 1/3 số seed không bị phát hiện ổn định với 5 seed.
 - [ ] Judge replay trên CSV đã công khai, chưa có tập held-out mới. Rubric tone v1.1 (xưng hô, emoji, không dấu) chưa được calibrate lại.
 - [ ] Metric FM-08 chỉ đọc số tiền có đơn vị (đ / VND / đồng). Reply hứa hẹn không kèm số ("sẽ hoàn thêm", ví dụ H-063) chưa được grader code nào bắt.
-- [ ] Trung bình có thể che hồi quy ở nhóm nhỏ (claim có chuyển tiền) và lỗi chập chờn. Chưa có slice gate và `pass^k` (kế hoạch M5–M6).
-- [ ] Gate chưa kiểm tính toàn vẹn report (NaN, dòng bị bỏ, seed bị chọn). Chưa có `integrity_check` (M7).
+- [x] Trung bình có thể che hồi quy ở nhóm nhỏ và lỗi chập chờn. Đã có slice gate (`money_movement`, `adversarial`, `denial`) và `pass_hat_5` ≥ 0.85 trong spec v2 (M5–M6); xem eval card.
+- [x] Gate kiểm tính toàn vẹn report (`integrity_check` + ratchet, M7): chặn 4/4 trap công khai và 6 trap tự dựng.
+- [ ] Report giả mạo nhất quán (một dòng pass được gán lại seed) không phát hiện được từ report. Phải dựa vào CI chạy lại eval.
 
 ## 7. Khi nào lên v1.2
 - Đổi eval set (thêm item từ trace case, pack adversarial v2, sửa nhãn) → tăng `eval_set_version`, chạy lại baseline trên `main`.
