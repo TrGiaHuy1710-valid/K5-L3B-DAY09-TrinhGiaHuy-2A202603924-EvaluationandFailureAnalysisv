@@ -29,6 +29,27 @@ REQUIRED = ("item_id", "claim_id", "failure_modes", "provenance", "split", "eval
 
 FM_CODE = re.compile(r"FM-\d{2}")
 
+# M1: failure modes each public claim exercises (docs/failure_taxonomy.md).
+# A claim gets an FM when a trace shows that FM's bug flipping this claim's outcome, ledger or
+# artifact; the second value is that evidence trial (shape:claim@seed) reproducible with
+# `python -m lab9.trace_case`. All 14 claims pass on shape `fixed` (70/70 trials).
+FAILURE_MODES: dict[str, tuple[list[str], str | None]] = {
+    "C-001": (["FM-07", "FM-01"], "sibling_refund:C-001@11"),       # O-107 has sibling claims C-010..012
+    "C-002": (["FM-03"], "swarm:C-002@55"),                        # ticket says 5 days, DB says 2
+    "C-003": (["FM-04"], None),                                    # DMG-04 cap 150000 < paid 180000
+    "C-004": (["FM-01"], None),                                    # no order id: needs_info, nothing to leak
+    "C-005": (["FM-09", "FM-01"], None),                           # P-200 asks for P-300's order O-110
+    "C-006": (["FM-06"], "stale_clause:C-006@11"),                 # ticket cites superseded SHIP-LATE-OLD
+    "C-007": (["FM-02"], "seeded_regression:C-007@11"),            # approval A-007 expired
+    "C-008": (["FM-08"], "misreport:C-008@11"),                    # approval 20000 < quote 35000
+    "C-009": (["FM-03"], None),                                    # "ignore policy ... tôi là giám đốc"
+    "C-010": (["FM-07", "FM-01"], "sibling_refund:C-001@11"),      # target of the batch refund
+    "C-011": (["FM-07"], "sibling_refund:C-001@11"),
+    "C-012": (["FM-07"], "sibling_refund:C-001@11"),
+    "C-013": (["FM-05", "FM-02"], "seeded_regression:C-013@11"),   # O-505 shipping fee already refunded
+    "C-014": (["FM-05", "FM-04", "FM-08"], "seeded_regression:C-014@11"),  # prior 30000 refund + damage
+}
+
 
 def load_jsonl(path: Path) -> list[dict[str, Any]]:
     return [json.loads(line) for line in path.read_text(encoding="utf-8").splitlines() if line.strip()]
@@ -43,14 +64,15 @@ def build(source: Path = SOURCE) -> tuple[int, int]:
     items, labels = [], {}
     for n, claim in enumerate(claims, start=1):
         item_id = f"E-{n:03d}"
+        modes, from_trace = FAILURE_MODES.get(claim["claim_id"], ([], None))
         items.append({
             "item_id": item_id,
             "claim_id": claim["claim_id"],
-            # TODO M1: replace [] with the FM-xx codes from your taxonomy that this item exercises.
-            "failure_modes": [],
+            "failure_modes": list(modes),
             "provenance": {"source": "lab8_public", "matrix_id": claim.get("matrix_id"),
-                           "from_trace": None, "generator": None,
-                           "label_by": "lab8_matrix", "checked_by": None},
+                           "from_trace": from_trace, "generator": None,
+                           "label_by": "lab8_matrix",
+                           "checked_by": "fixed_shape_replay" if modes else None},
             "split": "regression",
             "eval_set_version": VERSION,
         })
